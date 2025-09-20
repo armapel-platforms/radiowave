@@ -28,12 +28,9 @@ window.addEventListener('load', () => {
     const audioElement = allSelectors.audioElement;
 
     const setAudioPoster = () => {
-        if (!audioElement) return;
-        if (isDesktop()) {
-            audioElement.poster = '/logo/desktop-poster.png';
-        } else {
-            audioElement.poster = '/logo/attention.png';
-        }
+        if (!allSelectors.playerWrapper) return;
+        const defaultPosterUrl = isDesktop() ? '/logo/desktop-poster.png' : '/logo/attention.png';
+        allSelectors.playerWrapper.style.backgroundImage = `url('${defaultPosterUrl}')`;
     };
     
     const setupLayout = () => {
@@ -191,7 +188,7 @@ window.addEventListener('load', () => {
         await initPlayer(); 
         activeStream = stream;
 
-        audioElement.poster = stream.logo;
+        allSelectors.playerWrapper.style.backgroundImage = `url('${stream.logo}')`;
 
         const mimeType = stream.type; 
 
