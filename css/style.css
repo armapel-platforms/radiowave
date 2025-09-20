@@ -269,6 +269,7 @@ header.subpage-header h1 {
 }
 .control-btn .material-symbols-outlined {
     font-size: 32px;
+    font-weight: 200;
 }
 
 .minimized-player { 
