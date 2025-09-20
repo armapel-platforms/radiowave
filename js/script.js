@@ -24,7 +24,7 @@ window.addEventListener('load', () => {
     let allStreams = [];
     const isDesktop = () => window.innerWidth >= 1024;
     
-    const originalTitle = "Radiowave - Philippine Radio Hub";
+    const originalTitle = "Wave - The Home of Philippine Radio Stations";
     const audioElement = allSelectors.audioElement;
 
     const setAudioPoster = () => {
@@ -199,7 +199,7 @@ window.addEventListener('load', () => {
 
             document.getElementById("player-channel-name").textContent = stream.name;
             document.getElementById("player-channel-category").textContent = "Now Playing";
-            document.title = `${stream.name} - Radiowave`;
+            document.title = `${stream.name} - Wave`;
             
             if (!isDesktop()) {
                 allSelectors.playerView.classList.add("active");
