@@ -31,7 +31,7 @@
     }
 
     .video-player-container {
-        max-width: none;
+        max-width: 450px; 
         margin: 0;
     }
 
@@ -63,7 +63,6 @@
         display: none !important;
     }
 
-    /* Reset spacing for elements within the scrolling container */
     .content-container .featured-slider,
     .content-container .category-nav,
     .content-container .section-header,
