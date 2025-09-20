@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
         floatingMenu: document.getElementById("floating-menu"),
         channelListingsContainer: document.getElementById("channel-listings"),
         spinner: document.getElementById("spinner"),
-        videoElement: document.getElementById("video-player"),
+        audioElement: document.getElementById("audio-player"),
         playerWrapper: document.getElementById("video-player-wrapper"),
         playerView: document.getElementById("player-view"),
         minimizedPlayer: document.getElementById("minimized-player"),
@@ -25,14 +25,14 @@ window.addEventListener('load', () => {
     const isDesktop = () => window.innerWidth >= 1024;
     
     const originalTitle = "Radiowave - Philippine Radio Hub";
-    const videoElement = allSelectors.videoElement;
+    const audioElement = allSelectors.audioElement;
 
-    const setVideoPoster = () => {
-        if (!videoElement) return;
+    const setAudioPoster = () => {
+        if (!audioElement) return;
         if (isDesktop()) {
-            videoElement.poster = '/logo/desktop-poster.png';
+            audioElement.poster = '/logo/desktop-poster.png';
         } else {
-            videoElement.poster = '/logo/attention.png';
+            audioElement.poster = '/logo/attention.png';
         }
     };
     
@@ -153,7 +153,7 @@ window.addEventListener('load', () => {
 
         shaka.polyfill.installAll();
         if (shaka.Player.isBrowserSupported()) {
-            player = new shaka.Player(videoElement);
+            player = new shaka.Player(audioElement);
             player.addEventListener('error', onErrorEvent);
             setupCustomControls();
         } else {
@@ -166,22 +166,22 @@ window.addEventListener('load', () => {
         const muteBtn = document.getElementById('mute-btn');
 
         playPauseBtn.addEventListener('click', () => {
-            if (videoElement.paused) videoElement.play();
-            else videoElement.pause();
+            if (audioElement.paused) audioElement.play();
+            else audioElement.pause();
         });
 
         muteBtn.addEventListener('click', () => {
-            videoElement.muted = !videoElement.muted;
+            audioElement.muted = !audioElement.muted;
         });
 
-        videoElement.addEventListener('play', () => {
+        audioElement.addEventListener('play', () => {
             playPauseBtn.innerHTML = `<span class="material-symbols-outlined">pause</span>`;
         });
-        videoElement.addEventListener('pause', () => {
+        audioElement.addEventListener('pause', () => {
             playPauseBtn.innerHTML = `<span class="material-symbols-outlined">play_arrow</span>`;
         });
-        videoElement.addEventListener('volumechange', () => {
-            muteBtn.innerHTML = videoElement.muted || videoElement.volume === 0
+        audioElement.addEventListener('volumechange', () => {
+            muteBtn.innerHTML = audioElement.muted || audioElement.volume === 0
                 ? `<span class="material-symbols-outlined">volume_off</span>`
                 : `<span class="material-symbols-outlined">volume_up</span>`;
         });
@@ -195,8 +195,8 @@ window.addEventListener('load', () => {
 
         try {
             await player.load(stream.manifestUri, null, mimeType);
-            videoElement.muted = !shouldBeUnmuted;
-            videoElement.play();
+            audioElement.muted = !shouldBeUnmuted;
+            audioElement.play();
 
             document.getElementById("player-channel-name").textContent = stream.name;
             document.getElementById("player-channel-category").textContent = "Now Playing";
@@ -224,12 +224,13 @@ window.addEventListener('load', () => {
             }, 250);
         }
     };
+
     const restorePlayer = (e) => {
         if (isDesktop() || e.target.closest("#exit-player-btn")) return;
         if (allSelectors.minimizedPlayer.classList.contains("active")) {
             allSelectors.minimizedPlayer.classList.remove("active");
             allSelectors.playerView.classList.add("active");
-            if (videoElement) videoElement.play();
+            if (audioElement) audioElement.play();
         }
     };
 
@@ -239,9 +240,9 @@ window.addEventListener('load', () => {
         if (player) {
             await player.unload();
         }
-        videoElement.removeAttribute('src');
+        audioElement.removeAttribute('src');
         activeStream = null;
-        setVideoPoster();
+        setAudioPoster();
         history.pushState({}, "", window.location.pathname);
         document.title = originalTitle;
 
@@ -261,10 +262,10 @@ window.addEventListener('load', () => {
             return;
         }
 
-        setVideoPoster();
+        setAudioPoster();
         setupLayout();
         window.addEventListener('resize', () => {
-            setVideoPoster();
+            setAudioPoster();
             setupLayout();
         });
         
