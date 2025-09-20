@@ -220,7 +220,7 @@ window.addEventListener('load', () => {
                 document.getElementById("minimized-player-category").textContent = "Now Playing";
                 allSelectors.minimizedPlayer.classList.remove("active");
             }
-            history.pushState({ channel: stream.name }, "", `?play=${encodeURIComponent(stream.name.replace(/\s+/g, "-"))}`);
+            history.pushState({ channel: stream.name }, "", `/home?play=${encodeURIComponent(stream.name.replace(/\s+/g, "-"))}`);
         } catch (error) {
             console.error("Error opening player:", error);
             onErrorEvent({ detail: error }); 
