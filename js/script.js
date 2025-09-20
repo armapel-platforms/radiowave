@@ -29,7 +29,7 @@ window.addEventListener('load', () => {
 
     const setAudioPoster = () => {
         if (!allSelectors.playerWrapper) return;
-        const defaultPosterUrl = isDesktop() ? 'logo/desktop-poster.png' : 'logo/attention.png';
+        const defaultPosterUrl = isDesktop() ? '/logo/desktop-poster.png' : '/logo/attention.png';
         allSelectors.playerWrapper.style.backgroundImage = `url('${defaultPosterUrl}')`;
     };
     
@@ -49,10 +49,10 @@ window.addEventListener('load', () => {
     const renderMenu = () => {
         allSelectors.floatingMenu.innerHTML = `
         <ul>
-            <li><a href="about.html"><span class="material-symbols-outlined">info</span> About Us</a></li>
-            <li><a href="faq.html"><span class="material-symbols-outlined">quiz</span> FAQ</a></li>
-            <li><a href="privacy.html"><span class="material-symbols-outlined">shield</span> Privacy Policy</a></li>
-            <li><a href="terms.html"><span class="material-symbols-outlined">gavel</span> Terms of Service</a></li>
+            <li><a href="/home/about-us"><span class="material-symbols-outlined">info</span> About Us</a></li>
+            <li><a href="/home/faq"><span class="material-symbols-outlined">quiz</span> FAQ</a></li>
+            <li><a href="/home/privacy-policy"><span class="material-symbols-outlined">shield</span> Privacy Policy</a></li>
+            <li><a href="/home/terms-of-service"><span class="material-symbols-outlined">gavel</span> Terms of Service</a></li>
         </ul>`;
 
         allSelectors.floatingMenu.querySelectorAll("li").forEach(e => e.addEventListener("click", t => {
@@ -63,6 +63,7 @@ window.addEventListener('load', () => {
 
     const renderStations = () => {
         const listContainer = allSelectors.channelListingsContainer;
+        if (!listContainer) return;
         listContainer.innerHTML = '';
         const listElement = document.createElement('div');
         listElement.className = 'channel-list';
@@ -74,8 +75,8 @@ window.addEventListener('load', () => {
     };
 
     const loadMoreChannels = () => {
-        allSelectors.spinner.style.display = 'flex';
-        allSelectors.loadMoreContainer.style.display = 'none';
+        if (allSelectors.spinner) allSelectors.spinner.style.display = 'flex';
+        if (allSelectors.loadMoreContainer) allSelectors.loadMoreContainer.style.display = 'none';
 
         setTimeout(() => {
             const listElement = allSelectors.channelListingsContainer.querySelector('.channel-list');
@@ -104,8 +105,10 @@ window.addEventListener('load', () => {
             });
 
             currentlyDisplayedCount += channelsToRender.length;
-            allSelectors.loadMoreContainer.style.display = currentlyDisplayedCount < allStreams.length ? 'block' : 'none';
-            allSelectors.spinner.style.display = 'none';
+            if (allSelectors.loadMoreContainer) {
+                allSelectors.loadMoreContainer.style.display = currentlyDisplayedCount < allStreams.length ? 'block' : 'none';
+            }
+            if (allSelectors.spinner) allSelectors.spinner.style.display = 'none';
 
             if (listElement.children.length === 0) {
                 allSelectors.channelListingsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 50px 0; font-size: 0.85rem;">No stations available.</p>';
@@ -161,6 +164,7 @@ window.addEventListener('load', () => {
     function setupCustomControls() {
         const playPauseBtn = document.getElementById('play-pause-btn');
         const muteBtn = document.getElementById('mute-btn');
+        if (!playPauseBtn || !muteBtn) return;
 
         playPauseBtn.addEventListener('click', () => {
             if (audioElement.paused) audioElement.play();
@@ -188,12 +192,20 @@ window.addEventListener('load', () => {
         await initPlayer(); 
         activeStream = stream;
 
-        allSelectors.playerWrapper.style.backgroundImage = `url('${stream.logo}')`;
-
-        const mimeType = stream.type; 
-
         try {
-            await player.load(stream.manifestUri, null, mimeType);
+            const response = await fetch(`/api/getManifest?name=${encodeURIComponent(stream.name)}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch manifest: ${response.statusText}`);
+            }
+            const { manifestUri } = await response.json();
+            
+            if (!manifestUri) {
+                 throw new Error(`Manifest URI not found for ${stream.name}`);
+            }
+            
+            allSelectors.playerWrapper.style.backgroundImage = `url('${stream.logo}')`;
+
+            await player.load(manifestUri, null, stream.type);
             audioElement.muted = !shouldBeUnmuted;
             audioElement.play();
 
@@ -210,25 +222,26 @@ window.addEventListener('load', () => {
             }
             history.pushState({ channel: stream.name }, "", `?play=${encodeURIComponent(stream.name.replace(/\s+/g, "-"))}`);
         } catch (error) {
-            onErrorEvent({ detail: error });
+            console.error("Error opening player:", error);
+            onErrorEvent({ detail: error }); 
         }
     };
 
    const minimizePlayer = () => {
-        if (isDesktop()) return;
+        if (isDesktop() || !allSelectors.playerView) return;
         if (allSelectors.playerView.classList.contains("active")) {
             allSelectors.playerView.classList.remove("active");
             setTimeout(() => {
-                allSelectors.minimizedPlayer.classList.add("active");
+                if (allSelectors.minimizedPlayer) allSelectors.minimizedPlayer.classList.add("active");
             }, 250);
         }
     };
 
     const restorePlayer = (e) => {
-        if (isDesktop() || e.target.closest("#exit-player-btn")) return;
+        if (isDesktop() || e.target.closest("#exit-player-btn") || !allSelectors.minimizedPlayer) return;
         if (allSelectors.minimizedPlayer.classList.contains("active")) {
             allSelectors.minimizedPlayer.classList.remove("active");
-            allSelectors.playerView.classList.add("active");
+            if (allSelectors.playerView) allSelectors.playerView.classList.add("active");
             if (audioElement) audioElement.play();
         }
     };
@@ -249,16 +262,30 @@ window.addEventListener('load', () => {
             document.getElementById('player-channel-name').textContent = 'Station Name';
             document.getElementById('player-channel-category').textContent = 'Now Playing';
         } else {
-            allSelectors.playerView.classList.remove("active");
-            allSelectors.minimizedPlayer.classList.remove("active");
+            if (allSelectors.playerView) allSelectors.playerView.classList.remove("active");
+            if (allSelectors.minimizedPlayer) allSelectors.minimizedPlayer.classList.remove("active");
+        }
+    };
+
+    const fetchStations = async () => {
+        try {
+            const response = await fetch('/api/getStations');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to fetch stations:', error);
+            return [];
         }
     };
 
     async function main() {
-        allStreams = radioStations;
-        if (allStreams.length === 0) {
+        allStreams = await fetchStations();
+        
+        if (allSelectors.channelListingsContainer && allStreams.length === 0) {
             allSelectors.channelListingsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 50px 0;">Could not load stations.</p>';
-            return;
+            if (allSelectors.spinner) allSelectors.spinner.style.display = 'none';
         }
 
         setAudioPoster();
@@ -272,13 +299,17 @@ window.addEventListener('load', () => {
         renderMenu();
         setupMenuInteractions();
         setupSlider();
-        renderStations();
+
+        if (allSelectors.channelListingsContainer) {
+            renderStations();
+        }
+        
         initPlayer();
         
-        allSelectors.loadMoreBtn.addEventListener('click', loadMoreChannels);
-        allSelectors.minimizeBtn.addEventListener('click', minimizePlayer);
-        allSelectors.minimizedPlayer.addEventListener('click', restorePlayer);
-        allSelectors.exitBtn.addEventListener('click', closePlayer);
+        if(allSelectors.loadMoreBtn) allSelectors.loadMoreBtn.addEventListener('click', loadMoreChannels);
+        if(allSelectors.minimizeBtn) allSelectors.minimizeBtn.addEventListener('click', minimizePlayer);
+        if(allSelectors.minimizedPlayer) allSelectors.minimizedPlayer.addEventListener('click', restorePlayer);
+        if(allSelectors.exitBtn) allSelectors.exitBtn.addEventListener('click', closePlayer);
         
         const params = new URLSearchParams(window.location.search);
         const channelToPlay = params.get('play');
