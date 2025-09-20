@@ -132,9 +132,6 @@ header.subpage-header h1 {
     font-size: 0.85rem;
 }
 
-#search-results.channel-listings {
-    padding-top: 20px;
-}
 .floating-menu {
     position: fixed; top: 65px; right: 20px;
     background: var(--glass-bg);backdrop-filter: 
