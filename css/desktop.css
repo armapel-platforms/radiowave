@@ -31,15 +31,15 @@
     }
 
     .video-player-container {
-        max-width: 550px;
-        margin: 0 auto;
+    max-width: 560px;
+    margin: 0 auto;
     }
-
-    #video-player:-webkit-full-screen {
+    
+    #audio-player:-webkit-full-screen {
         border-radius: 0;
     }
     
-    #video-player:fullscreen {
+    #audio-player:fullscreen {
         border-radius: 0;
     }
 
