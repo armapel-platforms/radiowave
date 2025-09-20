@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>FAQ - Wave</title>
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" type="image/png" href="logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="logo/favicon.svg" />
+    <link rel="shortcut" href="logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logo/apple-touch-icon.png" />
+    <link rel="manifest" href="logo/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200,0..1,0" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/desktop.css">
+</head>
+<body class="subpage">
+    <header class="subpage-header">
+        <a href="index.html" class="back-link icon-link">
+            <span class="material-symbols-outlined">arrow_back_ios_new</span>
+        </a>
+        <h1>Frequently Asked Questions</h1>
+    </header>
+
+    <main class="subpage-content">
+        <div class="faq-intro">
+            <p>Welcome to our FAQ! Here you'll find answers to common questions about <strong>wave</strong>, our privacy practices, and tips for the best listening experience. Whether you're looking for a specific station or just want to tune in, <strong>wave</strong> makes it easy.</p>
+        </div>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is Wave free to use?</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely! Wave is completely free to use. There are no fees or subscriptions required—just pick a station and start listening.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is Wave?</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Wave is a web-based player for publicly available Philippine radio streams. We gather live broadcasts from across the country, allowing you to listen to your favorite music, news, and talk shows online.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is listening to radio on Wave legal?</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes. We only provide links to publicly accessible streams and do not host any content ourselves. Every stream is believed to be provided by its legal copyright holder for public distribution. You can find more details in the Legal Disclaimer on our "About Us" page.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Why are some stations unavailable or not working?</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="faq-answer">
+                    <p>A station might be temporarily down due to maintenance on their end or network issues. We check our streams for quality, but since we don't control the broadcasts, some downtime is occasionally unavoidable. Please try again later.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How does Wave protect my privacy?</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Your privacy is our top priority. We do not require you to sign up, and we do not collect, store, or share any of your personal data. You can listen with peace of mind knowing your information remains completely private.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
