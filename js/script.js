@@ -29,7 +29,7 @@ window.addEventListener('load', () => {
 
     const setAudioPoster = () => {
         if (!allSelectors.playerWrapper) return;
-        const defaultPosterUrl = isDesktop() ? '/logo/desktop-poster.png' : '/logo/attention.png';
+        const defaultPosterUrl = isDesktop() ? 'logo/desktop-poster.png' : 'logo/attention.png';
         allSelectors.playerWrapper.style.backgroundImage = `url('${defaultPosterUrl}')`;
     };
     
