@@ -93,6 +93,12 @@ header.subpage-header h1 {
     margin: 0;
 }
 
+.search-container { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 20px; 
+}
+
 .search-bar {
     display: flex;
     align-items: center;
