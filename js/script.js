@@ -143,8 +143,6 @@ window.addEventListener('load', () => {
             });
         });
     };
-
-    // --- Shaka Player Implementation ---
     
     function onErrorEvent(event) {
         console.error('Shaka Player Error:', event.detail);
@@ -193,8 +191,10 @@ window.addEventListener('load', () => {
         await initPlayer(); 
         activeStream = stream;
 
+        const mimeType = stream.type; 
+
         try {
-            await player.load(stream.manifestUri);
+            await player.load(stream.manifestUri, null, mimeType);
             videoElement.muted = !shouldBeUnmuted;
             videoElement.play();
 
@@ -273,7 +273,7 @@ window.addEventListener('load', () => {
         setupMenuInteractions();
         setupSlider();
         renderStations();
-        initPlayer(); // Initialize player on load
+        initPlayer();
         
         allSelectors.loadMoreBtn.addEventListener('click', loadMoreChannels);
         allSelectors.minimizeBtn.addEventListener('click', minimizePlayer);
