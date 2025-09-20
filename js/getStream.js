@@ -1,4 +1,4 @@
-const radioStations = [
+window.radioStations = [
     { 
         name: 'DYHP RMN Cebu', 
         logo: 'https://upload.wikimedia.org/wikipedia/en/c/cb/DYHP_612.png',
