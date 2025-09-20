@@ -1,0 +1,86 @@
+@media (min-width: 1024px) {
+    body {
+        padding-top: 60px;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .main-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    #player-view {
+        position: sticky;
+        top: 80px;
+        transform: none;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: 0;
+        height: auto;
+        z-index: 1;
+    }
+
+    .player-header {
+        display: none;
+    }
+
+    .video-player-container {
+        max-width: none;
+        margin: 0;
+    }
+
+    #video-player:-webkit-full-screen {
+        border-radius: 0;
+    }
+    
+    #video-player:fullscreen {
+        border-radius: 0;
+    }
+
+    .player-info {
+        max-width: none;
+        padding: 25px 20px 0;
+    }
+
+    .content-container {
+        height: calc(100vh - 100px);
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .content-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    #minimized-player {
+        display: none !important;
+    }
+
+    /* Reset spacing for elements within the scrolling container */
+    .content-container .featured-slider,
+    .content-container .category-nav,
+    .content-container .section-header,
+    .content-container .channel-listings,
+    .content-container .site-footer {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .content-container .featured-slider {
+        margin-top: 0;
+    }
+
+    .content-container .category-nav {
+        padding-top: 20px;
+        padding-bottom: 0;
+    }
+}
