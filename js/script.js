@@ -191,6 +191,8 @@ window.addEventListener('load', () => {
         await initPlayer(); 
         activeStream = stream;
 
+        audioElement.poster = stream.logo;
+
         const mimeType = stream.type; 
 
         try {
