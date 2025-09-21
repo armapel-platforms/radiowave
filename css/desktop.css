@@ -30,9 +30,9 @@
         display: none;
     }
 
-    .video-player-container {
-    max-width: 560px;
-    margin: 0 auto;
+    .video-player-container .player-info {
+        max-width: 560px;
+        margin: 0 auto;
     }
     
     #audio-player:-webkit-full-screen {
