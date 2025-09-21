@@ -281,45 +281,49 @@ window.addEventListener('load', () => {
     };
 
     async function main() {
-        allStreams = await fetchStations();
-        
-        if (allSelectors.channelListingsContainer && allStreams.length === 0) {
-            allSelectors.channelListingsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 50px 0;">Could not load stations.</p>';
-            if (allSelectors.spinner) allSelectors.spinner.style.display = 'none';
-        }
-
-        setAudioPoster();
-        setupLayout();
-        window.addEventListener('resize', () => {
+            allStreams = await fetchStations();
+            
+            window.radioStations = allStreams;
+            
+            document.dispatchEvent(new CustomEvent('stationsLoaded'));
+    
+            if (allSelectors.channelListingsContainer && allStreams.length === 0) {
+                allSelectors.channelListingsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 50px 0;">Could not load stations.</p>';
+                if (allSelectors.spinner) allSelectors.spinner.style.display = 'none';
+            }
+    
             setAudioPoster();
             setupLayout();
-        });
-        
-        setupHeaderScroll();
-        renderMenu();
-        setupMenuInteractions();
-        setupSlider();
-
-        if (allSelectors.channelListingsContainer) {
-            renderStations();
-        }
-        
-        initPlayer();
-        
-        if(allSelectors.loadMoreBtn) allSelectors.loadMoreBtn.addEventListener('click', loadMoreChannels);
-        if(allSelectors.minimizeBtn) allSelectors.minimizeBtn.addEventListener('click', minimizePlayer);
-        if(allSelectors.minimizedPlayer) allSelectors.minimizedPlayer.addEventListener('click', restorePlayer);
-        if(allSelectors.exitBtn) allSelectors.exitBtn.addEventListener('click', closePlayer);
-        
-        const params = new URLSearchParams(window.location.search);
-        const channelToPlay = params.get('play');
-        if (channelToPlay) {
-            const streamToPlay = allStreams.find(s => s.name.replace(/\s+/g, '-') === channelToPlay);
-            if (streamToPlay) {
-                openPlayer(streamToPlay, true);
+            window.addEventListener('resize', () => {
+                setAudioPoster();
+                setupLayout();
+            });
+            
+            setupHeaderScroll();
+            renderMenu();
+            setupMenuInteractions();
+            setupSlider();
+    
+            if (allSelectors.channelListingsContainer) {
+                renderStations();
+            }
+            
+            initPlayer();
+            
+            if(allSelectors.loadMoreBtn) allSelectors.loadMoreBtn.addEventListener('click', loadMoreChannels);
+            if(allSelectors.minimizeBtn) allSelectors.minimizeBtn.addEventListener('click', minimizePlayer);
+            if(allSelectors.minimizedPlayer) allSelectors.minimizedPlayer.addEventListener('click', restorePlayer);
+            if(allSelectors.exitBtn) allSelectors.exitBtn.addEventListener('click', closePlayer);
+            
+            const params = new URLSearchParams(window.location.search);
+            const channelToPlay = params.get('play');
+            if (channelToPlay) {
+                const streamToPlay = allStreams.find(s => s.name.replace(/\s+/g, '-') === channelToPlay);
+                if (streamToPlay) {
+                    openPlayer(streamToPlay, true);
+                }
             }
         }
-    }
-
-    main();
+    
+        main();
 });
