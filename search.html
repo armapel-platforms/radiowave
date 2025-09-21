@@ -37,79 +37,96 @@
         </div>
     </main>
     
-    <script src="/api/getStream.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('search-input');
-            const searchResultsContainer = document.getElementById('search-results');
-            const loadingMessage = document.getElementById('loading-message');
-            const initialMessage = document.getElementById('initial-message');
-            let allStreams = [];
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('search-input');
+        const searchResultsContainer = document.getElementById('search-results');
+        const loadingMessage = document.getElementById('loading-message');
+        const initialMessage = document.getElementById('initial-message');
+        let allStreams = [];
+
         
-            function initializeSearch() {
-                allStreams = window.radioStations || [];
+        async function initializeSearch() {
+            const storedStations = localStorage.getItem('radioStations');
+
+            if (storedStations) {
+                try {
+                    allStreams = JSON.parse(storedStations);
+                } catch (error) {
+                    console.error('Error parsing stations from localStorage:', error);
+                    allStreams = [];
+                }
+            }
+
+            if (allStreams.length === 0) {
+                try {
+                    const response = await fetch('/api/getStations');
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    allStreams = await response.json();
+                    localStorage.setItem('radioStations', JSON.stringify(allStreams));
+                } catch (error) {
+                    console.error('Failed to fetch stations:', error);
+                    allStreams = [];
+                }
+            }
+            
+            if (allStreams.length > 0) {
+                loadingMessage.style.display = 'none';
+                initialMessage.style.display = 'block';
+                searchInput.disabled = false;
+                searchInput.focus();
+            } else {
+                loadingMessage.textContent = 'Failed to load stations. Please try again later.';
+            }
+        }
+
+
+        const renderResults = (results) => {
+            searchResultsContainer.innerHTML = '';
+            if (results.length === 0) {
+                searchResultsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 50px 0; font-size: 0.85rem; ">No stations found.</p>';
+                return;
+            }
+
+            const list = document.createElement('div');
+            list.className = 'channel-list';
+            results.forEach(stream => {
+                const item = document.createElement('div');
+                item.className = 'channel-list-item';
                 
-                if (allStreams.length > 0) {
-                    loadingMessage.style.display = 'none';
-                    initialMessage.style.display = 'block';
-                    searchInput.disabled = false;
-                    searchInput.focus();
-                } else {
-                    loadingMessage.textContent = 'Failed to load stations. Please try again later.';
-                }
-            }
-        
-            document.addEventListener('stationsLoaded', initializeSearch);
-        
-            if (window.radioStations) {
-                initializeSearch();
-            }
-        
-        
-            const renderResults = (results) => {
-                searchResultsContainer.innerHTML = '';
-                if (results.length === 0) {
-                    searchResultsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 50px 0; font-size: 0.85rem; ">No stations found.</p>';
-                    return;
-                }
-        
-                const list = document.createElement('div');
-                list.className = 'channel-list';
-                results.forEach(stream => {
-                    const item = document.createElement('div');
-                    item.className = 'channel-list-item';
-                    
-                    item.innerHTML = `
-                        <div class="channel-info-left">
-                            <img src="${stream.logo}" alt="${stream.name} Logo" class="channel-logo" onerror="this.src='/logo/favicon.svg';">
-                            <span class="channel-name">${stream.name}</span>
-                        </div>
-                        <div class="channel-info-right">
-                            <span class="material-symbols-outlined">sensors</span>
-                        </div>`;
-        
-                    item.addEventListener('click', () => {
-                        window.location.href = `/?play=${encodeURIComponent(stream.name.replace(/\s+/g, '-'))}`;
-                    });
-                    list.appendChild(item);
+                item.innerHTML = `
+                    <div class="channel-info-left">
+                        <img src="${stream.logo}" alt="${stream.name} Logo" class="channel-logo" onerror="this.src='/logo/favicon.svg';">
+                        <span class="channel-name">${stream.name}</span>
+                    </div>
+                    <div class="channel-info-right">
+                        <span class="material-symbols-outlined">sensors</span>
+                    </div>`;
+
+                item.addEventListener('click', () => {
+                    window.location.href = `/?play=${encodeURIComponent(stream.name.replace(/\s+/g, '-'))}`;
                 });
-                searchResultsContainer.appendChild(list);
-            };
-        
-            searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase().trim();
-                initialMessage.style.display = 'none';
-                if (query.length > 1) {
-                    const filteredStreams = allStreams.filter(stream => stream.name.toLowerCase().includes(query));
-                    renderResults(filteredStreams);
-                } else {
-                    searchResultsContainer.innerHTML = '';
-                    if (query.length === 0) {
-                        initialMessage.style.display = 'block';
-                    }
-                }
+                list.appendChild(item);
             });
+            searchResultsContainer.appendChild(list);
+        };
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            initialMessage.style.display = 'none';
+            if (query.length > 1) {
+                const filteredStreams = allStreams.filter(stream => stream.name.toLowerCase().includes(query));
+                renderResults(filteredStreams);
+            } else {
+                searchResultsContainer.innerHTML = '';
+                if (query.length === 0) {
+                    initialMessage.style.display = 'block';
+                }
+            }
         });
-    </script>
+
+        initializeSearch();
+    });
+</script>
 </body>
 </html>
