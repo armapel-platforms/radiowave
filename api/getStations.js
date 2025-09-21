@@ -1,6 +1,6 @@
 const streams = [
     { name: 'DYHP RMN Cebu', logo: 'https://upload.wikimedia.org/wikipedia/en/c/cb/DYHP_612.png', type: 'audio/mpeg', manifestUri: 'https://de3.amfmph.com/ssl/rmncebu?mp=/stream&1758366700449' },
-    { name: 'Magic 89.9 Manila', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Magic89.9_logo.gif', type: 'audio/mpeg', manifestUri: 'https://stream.zeno.fm/hwr0geklhbouv' },
+    { name: 'Magic 89.9 Manila', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Magic89.9_logo.gif', type: 'audio/mpeg', manifestUri: 'https://stream.zeno.fm/sh37pvfd938uv' },
     { name: 'Energy FM Cebu', logo: 'https://radyoph.com/wp-content/uploads/2025/03/energyfmcebu.png', type: 'audio/mpeg', manifestUri: 'https://stream.zeno.fm/4oa5m3ffwutuv' },
     { name: 'Love Radio Cebu', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/17/LoveRadio979.png', type: 'audio/mpeg', manifestUri: 'https://loveradiocebu.radioca.st/;' },
     { name: 'Yes! FM Cebu', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/YesFMCebu2024.png/500px-YesFMCebu2024.png', type: 'audio/mpeg', manifestUri: 'https://yesfmcebu.radioca.st/;' },
