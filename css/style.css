@@ -74,13 +74,12 @@ header.scrolled {
     text-decoration: none;
     color: inherit;
 }
-
 .beta-label {
     background-color: var(--theme-color);
-    color: var(--text-secondary);
+    color: var(--background-color);
     padding: 3px 5px;
     border-radius: 4px;
-    font-size: 0.6em;
+    font-size: 0.45em;
     font-weight: bold;
     margin-left: 8px;
     text-transform: uppercase;
