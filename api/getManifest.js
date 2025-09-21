@@ -24,7 +24,7 @@ export default function handler(request, response) {
   const { name } = request.query;
 
   if (!name) {
-    return response.status(400).json({ error: 'Channel name is required' });
+    return response.status(400).json({ error: 'Station name is required' });
   }
 
   const streamData = streams.find(s => s.name === name);
