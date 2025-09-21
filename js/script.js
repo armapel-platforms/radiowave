@@ -8,7 +8,6 @@ window.addEventListener('load', () => {
         spinner: document.getElementById("spinner"),
         audioElement: document.getElementById("audio-player"),
         playerWrapper: document.getElementById("video-player-wrapper"),
-        stickyLogoContainer: document.getElementById("sticky-logo-container"),
         playerView: document.getElementById("player-view"),
         minimizedPlayer: document.getElementById("minimized-player"),
         minimizeBtn: document.getElementById("minimize-player-btn"),
@@ -25,13 +24,14 @@ window.addEventListener('load', () => {
     let allStreams = [];
     const isDesktop = () => window.innerWidth >= 1024;
     
-    const originalTitle = "Wave - Listen to Your Favorite Radio Stations";
+    const originalTitle = "Wave - Wave - Listen to Your Favorite Radio Stations";
     const audioElement = allSelectors.audioElement;
 
     const setAudioPoster = () => {
-        if (!allSelectors.stickyLogoContainer) return;
+        if (!allSelectors.playerWrapper) return;
         const defaultPosterUrl = isDesktop() ? '/logo/desktop-poster.png' : '/logo/attention.png';
-        allSelectors.stickyLogoContainer.style.backgroundImage = `url('${defaultPosterUrl}')`;
+        allSelectors.playerWrapper.style.backgroundImage = `url('${defaultPosterUrl}')`;
+        allSelectors.playerWrapper.style.backgroundColor = '#000000';
     };
     
     const setupLayout = () => {
@@ -55,11 +55,7 @@ window.addEventListener('load', () => {
             <li><a href="/home/privacy-policy"><span class="material-symbols-outlined">shield</span> Privacy Policy</a></li>
             <li><a href="/home/terms-of-service"><span class="material-symbols-outlined">gavel</span> Terms of Service</a></li>
         </ul>`;
-
-        allSelectors.floatingMenu.querySelectorAll("li").forEach(e => e.addEventListener("click", t => {
-            const n = e.querySelector("a");
-            if (n) { t.preventDefault(); window.location.href = n.href; }
-        }));
+        allSelectors.floatingMenu.querySelectorAll("li").forEach(e=>e.addEventListener("click",t=>{const n=e.querySelector("a");if(n){t.preventDefault();window.location.href=n.href}}));
     };
 
     const renderStations = () => {
@@ -69,7 +65,6 @@ window.addEventListener('load', () => {
         const listElement = document.createElement('div');
         listElement.className = 'channel-list';
         listContainer.appendChild(listElement);
-
         allSelectors.channelListHeader.textContent = "All Stations";
         currentlyDisplayedCount = 0;
         loadMoreChannels();
@@ -78,39 +73,22 @@ window.addEventListener('load', () => {
     const loadMoreChannels = () => {
         if (allSelectors.spinner) allSelectors.spinner.style.display = 'flex';
         if (allSelectors.loadMoreContainer) allSelectors.loadMoreContainer.style.display = 'none';
-
         setTimeout(() => {
             const listElement = allSelectors.channelListingsContainer.querySelector('.channel-list');
             if (!listElement) return;
-
             const channelsToRender = allStreams.slice(currentlyDisplayedCount, currentlyDisplayedCount + CHANNELS_PER_PAGE);
-
             channelsToRender.forEach(stream => {
                 const item = document.createElement('div');
                 item.className = 'channel-list-item';
-                
-                const liveSensorIcon = `<span class="material-symbols-outlined">sensors</span>`;
-
-                item.innerHTML = `
-                    <div class="channel-info-left">
-                        <img src="${stream.logo}" alt="${stream.name} Logo" class="channel-logo" onerror="this.src='/logo/favicon.svg';">
-                        <span class="channel-name">${stream.name}</span>
-                    </div>
-                    <div class="channel-info-right">
-                        ${liveSensorIcon}
-                    </div>`;
-
+                item.innerHTML = `<div class="channel-info-left"><img src="${stream.logo}" alt="${stream.name} Logo" class="channel-logo" onerror="this.src='/logo/favicon.svg';"><span class="channel-name">${stream.name}</span></div><div class="channel-info-right"><span class="material-symbols-outlined">sensors</span></div>`;
                 item.addEventListener('click', () => openPlayer(stream, true));
-                
                 listElement.appendChild(item);
             });
-
             currentlyDisplayedCount += channelsToRender.length;
             if (allSelectors.loadMoreContainer) {
                 allSelectors.loadMoreContainer.style.display = currentlyDisplayedCount < allStreams.length ? 'block' : 'none';
             }
             if (allSelectors.spinner) allSelectors.spinner.style.display = 'none';
-
             if (listElement.children.length === 0) {
                 allSelectors.channelListingsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 50px 0; font-size: 0.85rem;">No stations available.</p>';
             }
@@ -118,21 +96,16 @@ window.addEventListener('load', () => {
     };
 
     const setupHeaderScroll = () => { window.addEventListener("scroll", () => allSelectors.header.classList.toggle("scrolled", window.scrollY > 10)); };
-
     const setupMenuInteractions = () => {
         allSelectors.menuBtn.addEventListener("click", e => { e.stopPropagation(); allSelectors.floatingMenu.classList.toggle("active"); });
         document.addEventListener("click", () => allSelectors.floatingMenu.classList.remove("active"));
         allSelectors.floatingMenu.addEventListener("click", e => e.stopPropagation());
     };
-
     const setupSlider = () => {
         const slider = document.querySelector(".slider");
         if (!slider) return;
-        const slides = slider.querySelectorAll(".slide");
-        const dots = slider.parentElement.querySelectorAll(".slider-nav .dot");
-        let currentSlide = 0;
-        let slideInterval = setInterval(nextSlide, 5000);
-
+        const slides = slider.querySelectorAll(".slide"), dots = slider.parentElement.querySelectorAll(".slider-nav .dot");
+        let currentSlide = 0, slideInterval = setInterval(nextSlide, 5000);
         function goToSlide(n) { slides.forEach((s, i) => s.classList.toggle("active", i === n)); dots.forEach((d, i) => d.classList.toggle("active", i === n)); }
         function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; goToSlide(currentSlide); }
         dots.forEach((dot, index) => {
@@ -145,72 +118,43 @@ window.addEventListener('load', () => {
         });
     };
     
-    function onErrorEvent(event) {
-        console.error('Shaka Player Error:', event.detail);
-    }
+    function onErrorEvent(event) { console.error('Shaka Player Error:', event.detail); }
 
     async function initPlayer() {
         if (player) return;
-
         shaka.polyfill.installAll();
         if (shaka.Player.isBrowserSupported()) {
             player = new shaka.Player(audioElement);
             player.addEventListener('error', onErrorEvent);
             setupCustomControls();
-        } else {
-            console.error('Browser not supported!');
-        }
+        } else { console.error('Browser not supported!'); }
     }
     
     function setupCustomControls() {
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const muteBtn = document.getElementById('mute-btn');
+        const playPauseBtn = document.getElementById('play-pause-btn'), muteBtn = document.getElementById('mute-btn');
         if (!playPauseBtn || !muteBtn) return;
-
-        playPauseBtn.addEventListener('click', () => {
-            if (audioElement.paused) audioElement.play();
-            else audioElement.pause();
-        });
-
-        muteBtn.addEventListener('click', () => {
-            audioElement.muted = !audioElement.muted;
-        });
-
-        audioElement.addEventListener('play', () => {
-            playPauseBtn.innerHTML = `<span class="material-symbols-outlined">pause</span>`;
-        });
-        audioElement.addEventListener('pause', () => {
-            playPauseBtn.innerHTML = `<span class="material-symbols-outlined">play_arrow</span>`;
-        });
-        audioElement.addEventListener('volumechange', () => {
-            muteBtn.innerHTML = audioElement.muted || audioElement.volume === 0
-                ? `<span class="material-symbols-outlined">volume_off</span>`
-                : `<span class="material-symbols-outlined">volume_up</span>`;
-        });
+        playPauseBtn.addEventListener('click', () => { if (audioElement.paused) audioElement.play(); else audioElement.pause(); });
+        muteBtn.addEventListener('click', () => { audioElement.muted = !audioElement.muted; });
+        audioElement.addEventListener('play', () => { playPauseBtn.innerHTML = `<span class="material-symbols-outlined">pause</span>`; });
+        audioElement.addEventListener('pause', () => { playPauseBtn.innerHTML = `<span class="material-symbols-outlined">play_arrow</span>`; });
+        audioElement.addEventListener('volumechange', () => { muteBtn.innerHTML = audioElement.muted || audioElement.volume === 0 ? `<span class="material-symbols-outlined">volume_off</span>` : `<span class="material-symbols-outlined">volume_up</span>`; });
     }
     
     async function openPlayer(stream, shouldBeUnmuted = false) {
         await initPlayer(); 
         activeStream = stream;
-
         try {
             const response = await fetch(`/api/getManifest?name=${encodeURIComponent(stream.name)}`);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch manifest: ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`Failed to fetch manifest: ${response.statusText}`);
             const { manifestUri } = await response.json();
+            if (!manifestUri) throw new Error(`Manifest URI not found for ${stream.name}`);
             
-            if (!manifestUri) {
-                 throw new Error(`Manifest URI not found for ${stream.name}`);
-            }
-            
-            allSelectors.stickyLogoContainer.style.backgroundImage = `url('${stream.logo}')`;
-            allSelectors.playerWrapper.style.backgroundImage = 'none'; 
+            allSelectors.playerWrapper.style.backgroundImage = `url('${stream.logo}')`;
+            allSelectors.playerWrapper.style.backgroundColor = '#ffffff';
 
             await player.load(manifestUri, null, stream.type);
             audioElement.muted = !shouldBeUnmuted;
             audioElement.play();
-
             document.getElementById("player-channel-name").textContent = stream.name;
             document.getElementById("player-channel-category").textContent = "Now Playing";
             document.title = `${stream.name} - Wave`;
@@ -229,16 +173,13 @@ window.addEventListener('load', () => {
         }
     };
 
-   const minimizePlayer = () => {
+    const minimizePlayer = () => {
         if (isDesktop() || !allSelectors.playerView) return;
         if (allSelectors.playerView.classList.contains("active")) {
             allSelectors.playerView.classList.remove("active");
-            setTimeout(() => {
-                if (allSelectors.minimizedPlayer) allSelectors.minimizedPlayer.classList.add("active");
-            }, 250);
+            setTimeout(() => { if (allSelectors.minimizedPlayer) allSelectors.minimizedPlayer.classList.add("active"); }, 250);
         }
     };
-
     const restorePlayer = (e) => {
         if (isDesktop() || e.target.closest("#exit-player-btn") || !allSelectors.minimizedPlayer) return;
         if (allSelectors.minimizedPlayer.classList.contains("active")) {
@@ -247,19 +188,14 @@ window.addEventListener('load', () => {
             if (audioElement) audioElement.play();
         }
     };
-
     async function closePlayer(e) {
         e.stopPropagation();
-
-        if (player) {
-            await player.unload();
-        }
+        if (player) await player.unload();
         audioElement.removeAttribute('src');
         activeStream = null;
         setAudioPoster();
         history.pushState({}, "", window.location.pathname);
         document.title = originalTitle;
-
         if (isDesktop()) {
             document.getElementById('player-channel-name').textContent = 'Station Name';
             document.getElementById('player-channel-category').textContent = 'Now Playing';
@@ -272,9 +208,7 @@ window.addEventListener('load', () => {
     const fetchStations = async () => {
         try {
             const response = await fetch('/api/getStations');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            if (!response.ok) throw new Error('Network response was not ok');
             return await response.json();
         } catch (error) {
             console.error('Failed to fetch stations:', error);
@@ -284,16 +218,12 @@ window.addEventListener('load', () => {
 
     async function main() {
         allStreams = await fetchStations();
-        
         window.radioStations = allStreams;
-        
         document.dispatchEvent(new CustomEvent('stationsLoaded'));
-
         if (allSelectors.channelListingsContainer && allStreams.length === 0) {
             allSelectors.channelListingsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 50px 0;">Could not load stations.</p>';
             if (allSelectors.spinner) allSelectors.spinner.style.display = 'none';
         }
-
         setAudioPoster();
         setupLayout();
         
@@ -308,13 +238,8 @@ window.addEventListener('load', () => {
         renderMenu();
         setupMenuInteractions();
         setupSlider();
-
-        if (allSelectors.channelListingsContainer) {
-            renderStations();
-        }
-        
+        if (allSelectors.channelListingsContainer) renderStations();
         initPlayer();
-        
         if(allSelectors.loadMoreBtn) allSelectors.loadMoreBtn.addEventListener('click', loadMoreChannels);
         if(allSelectors.minimizeBtn) allSelectors.minimizeBtn.addEventListener('click', minimizePlayer);
         if(allSelectors.minimizedPlayer) allSelectors.minimizedPlayer.addEventListener('click', restorePlayer);
@@ -324,9 +249,7 @@ window.addEventListener('load', () => {
         const channelToPlay = params.get('play');
         if (channelToPlay) {
             const streamToPlay = allStreams.find(s => s.name.replace(/\s+/g, '-') === channelToPlay);
-            if (streamToPlay) {
-                openPlayer(streamToPlay, true);
-            }
+            if (streamToPlay) openPlayer(streamToPlay, true);
         }
     }
 
