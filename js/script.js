@@ -8,6 +8,7 @@ window.addEventListener('load', () => {
         spinner: document.getElementById("spinner"),
         audioElement: document.getElementById("audio-player"),
         playerWrapper: document.getElementById("video-player-wrapper"),
+        stickyLogoContainer: document.getElementById("sticky-logo-container"),
         playerView: document.getElementById("player-view"),
         minimizedPlayer: document.getElementById("minimized-player"),
         minimizeBtn: document.getElementById("minimize-player-btn"),
@@ -24,13 +25,13 @@ window.addEventListener('load', () => {
     let allStreams = [];
     const isDesktop = () => window.innerWidth >= 1024;
     
-    const originalTitle = "Wave - The Home of Philippine Radio Stations";
+    const originalTitle = "Wave - Listen to Your Favorite Radio Stations";
     const audioElement = allSelectors.audioElement;
 
     const setAudioPoster = () => {
-        if (!allSelectors.playerWrapper) return;
+        if (!allSelectors.stickyLogoContainer) return;
         const defaultPosterUrl = isDesktop() ? '/logo/desktop-poster.png' : '/logo/attention.png';
-        allSelectors.playerWrapper.style.backgroundImage = `url('${defaultPosterUrl}')`;
+        allSelectors.stickyLogoContainer.style.backgroundImage = `url('${defaultPosterUrl}')`;
     };
     
     const setupLayout = () => {
@@ -203,7 +204,8 @@ window.addEventListener('load', () => {
                  throw new Error(`Manifest URI not found for ${stream.name}`);
             }
             
-            allSelectors.playerWrapper.style.backgroundImage = `url('${stream.logo}')`;
+            allSelectors.stickyLogoContainer.style.backgroundImage = `url('${stream.logo}')`;
+            allSelectors.playerWrapper.style.backgroundImage = `none`; 
 
             await player.load(manifestUri, null, stream.type);
             audioElement.muted = !shouldBeUnmuted;
