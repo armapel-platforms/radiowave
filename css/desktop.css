@@ -17,12 +17,13 @@
     #player-view {
         position: sticky;
         top: 80px;
-        max-width: 555px;
+        height: calc(100vh - 100px);
         display: flex;
         flex-direction: column;
         padding: 0 20px;
         box-sizing: border-box;
         transition: none;
+        background-color: none;
     }
 
     .player-header {
@@ -32,7 +33,7 @@
     .video-player-container {
         margin: auto 0;
         aspect-ratio: 1 / 1;
-        max-width: 100%;
+        max-width: 555px;
         display: flex;
         align-items: center;
         justify-content: center;
