@@ -49,8 +49,14 @@
                 <div class="video-player-container" id="video-player-wrapper">                
                     <audio id="audio-player" playsinline></audio>
                     <div id="custom-controls" class="custom-controls">
-                        <button id="play-pause-btn" class="control-btn"><span class="material-symbols-outlined">play_arrow</span></button>
-                        <button id="mute-btn" class="control-btn"><span class="material-symbols-outlined">volume_up</span></button>
+                        <button id="play-pause-btn" class="control-btn">
+                            <svg class="icon play-icon active" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M292-258v-444q0-22.53 16-37.76Q324-755 345.33-755q6.67 0 13.67 2t14 7l350 221q12.5 8 18.75 20t6.25 25.16q0 13.16-6.5 25T723-435L373-214q-7 5-14.22 7-7.22 2-13.78 2-21 0-37-15.24T292-258Z"/></svg>
+                            <svg class="icon pause-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M655-171q-45 0-75.5-30.5T549-277v-408q0-45 30.5-75.5T655-791q45 0 75.5 30.5T761-685v408q0 45-30.5 75.5T655-171Zm-350 0q-45 0-75.5-30.5T199-277v-408q0-45 30.5-75.5T305-791q45 0 75.5 30.5T411-685v408q0 45-30.5 75.5T305-171Z"/></svg>
+                        </button>
+                        <button id="mute-btn" class="control-btn">
+                            <svg class="icon unmute-icon active" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M792-482q0-99-54.5-179T594-779q-20-8-30-27.5t-3-39.5q8-21 27.5-32t39.5-3q122 48 196 156.5T898-482q0 134-74 242.5T628-83q-20 8-39.5-3T561-118q-7-20 3-39.5t30-27.5q89-38 143.5-118T792-482ZM236-340H115q-22 0-37.5-15.5T62-393v-174q0-22 15.5-37.5T115-620h121l137-139q25-26 58-11.5t33 49.5v482q0 35-33 49.5T373-201L236-340Zm420-140q0 45-19 83.5T583-331q-13 8-26 .5T544-353v-254q0-15 13-22.5t26 .5q35 27 54 65.5t19 83.5Z"/></svg>
+                            <svg class="icon mute-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M703-121q-18 12-37.5 22T626-81q-21 8-41-2t-28-32q-7-20 3.5-39t30.5-28l18-8q9-4 17-9L460-364v125q0 35-33 49.5T369-201L232-340H111q-22 0-37.5-15.5T58-393v-174q0-22 15.5-37.5T111-620h93L48-776q-16-16-16-37.5T48-851q16-16 37.5-16t37.5 16l722 722q16 16 16 37t-16 37q-16 16-37.5 16T770-55l-67-66Zm85-361q0-99-54.5-179T590-779q-20-8-30-27.5t-3-39.5q8-21 27.5-32t39.5-3q121 48 195.5 156.5T894-482q0 26-3 51.5t-9 50.5q-7 29-26.5 38.5T816-337q-20-5-33-22t-5-41q5-20 7.5-40.5T788-482ZM578-629q29 23 48 54.5t24 67.5q2 9-6.5 13.5T629-495l-73-73q-8-8-12-17.5t-4-20.5v-2q0-14 13-22t25 1ZM384-740q-7-7-7.5-15.5T382-771l1-1q25-26 51-5.5t26 55.5q0 16-15 22t-26-5l-35-35Z"/></svg>
+                        </button>
                     </div>
                 </div>
                 <div class="player-info">
