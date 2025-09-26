@@ -34,7 +34,7 @@
     .video-player-container {
         max-width: 555px;
         aspect-ratio: 1 / 1;
-        margin: 0;
+        margin: auto;
         align-items: center;
         justify-content: center;
     }
