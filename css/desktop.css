@@ -34,38 +34,36 @@
         max-width: 555px;
         margin: 0 auto;
     }
-
-    .player-info {
-        max-width: 555px;
-    }
-        
-    #audio-player:-webkit-full-screen,
-    #audio-player:fullscreen {
-        border-radius: 0;
-        background: #000;
+    
+    #player-view:-webkit-full-screen,
+    #player-view:fullscreen {
+        background-color: #000; 
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        align-items: center;
+        align-items: center; 
         padding: 20px;
         box-sizing: border-box;
-        overflow-y: auto;
+        overflow-y: auto; 
     }
 
-     #audio-player:fullscreen .audio-poster {
-        margin-bottom: 20px;
-        max-width: 100%;
-        height: auto;
-    }
-
-    #audio-player:fullscreen .player-info {
-        position: static;
+    #player-view:fullscreen .video-player-container {
+        flex-shrink: 0;
+        margin: auto 0 20px 0;
         width: 100%;
-        max-width: 650px;
+        max-width: 60vh;
+    }
+
+    #player-view:fullscreen .player-info {
+        position: static !important;
+        width: 100%;
+        max-width: 100%;
         padding: 0;
         background: transparent;
+        text-align: center;
+        flex-shrink: 0;
     }
-    
+
     .player-info {
         max-width: none;
         padding: 25px 20px 0;
