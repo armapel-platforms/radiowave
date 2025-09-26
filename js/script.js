@@ -134,14 +134,52 @@ window.addEventListener('load', () => {
         } else { console.error('Browser not supported!'); }
     }
     
+    // MODIFIED: This function now uses SVG icons
     function setupCustomControls() {
-        const playPauseBtn = document.getElementById('play-pause-btn'), muteBtn = document.getElementById('mute-btn');
+        // Get references to the buttons
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const muteBtn = document.getElementById('mute-btn');
         if (!playPauseBtn || !muteBtn) return;
-        playPauseBtn.addEventListener('click', () => { if (audioElement.paused) audioElement.play(); else audioElement.pause(); });
-        muteBtn.addEventListener('click', () => { audioElement.muted = !audioElement.muted; });
-        audioElement.addEventListener('play', () => { playPauseBtn.innerHTML = `<span class="material-symbols-outlined">pause</span>`; });
-        audioElement.addEventListener('pause', () => { playPauseBtn.innerHTML = `<span class="material-symbols-outlined">play_arrow</span>`; });
-        audioElement.addEventListener('volumechange', () => { muteBtn.innerHTML = audioElement.muted || audioElement.volume === 0 ? `<span class="material-symbols-outlined">volume_off</span>` : `<span class="material-symbols-outlined">volume_up</span>`; });
+    
+        // Get references to the individual SVG icon elements
+        const playIcon = playPauseBtn.querySelector('.play-icon');
+        const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+        const unmuteIcon = muteBtn.querySelector('.unmute-icon');
+        const muteIcon = muteBtn.querySelector('.mute-icon');
+    
+        // Add click listeners to the buttons
+        playPauseBtn.addEventListener('click', () => { 
+            if (audioElement.paused) {
+                audioElement.play();
+            } else {
+                audioElement.pause();
+            }
+        });
+    
+        muteBtn.addEventListener('click', () => { 
+            audioElement.muted = !audioElement.muted; 
+        });
+    
+        // Update icons based on audio player events by toggling the 'active' class
+        audioElement.addEventListener('play', () => {
+            playIcon.classList.remove('active');
+            pauseIcon.classList.add('active');
+        });
+    
+        audioElement.addEventListener('pause', () => {
+            pauseIcon.classList.remove('active');
+            playIcon.classList.add('active');
+        });
+    
+        audioElement.addEventListener('volumechange', () => {
+            if (audioElement.muted || audioElement.volume === 0) {
+                unmuteIcon.classList.remove('active');
+                muteIcon.classList.add('active');
+            } else {
+                muteIcon.classList.remove('active');
+                unmuteIcon.classList.add('active');
+            }
+        });
     }
     
     async function openPlayer(stream, shouldBeUnmuted = false) {
@@ -194,6 +232,7 @@ window.addEventListener('load', () => {
             if (audioElement) audioElement.play();
         }
     };
+
     async function closePlayer(e) {
         e.stopPropagation();
         if (player) await player.unload();
