@@ -14,7 +14,8 @@ window.addEventListener('load', () => {
         exitBtn: document.getElementById("exit-player-btn"),
         channelListHeader: document.getElementById("channel-list-header"),
         loadMoreContainer: document.getElementById("load-more-container"),
-        loadMoreBtn: document.getElementById("load-more-btn")
+        loadMoreBtn: document.getElementById("load-more-btn"),
+        customControls: document.getElementById("custom-controls")
     };
 
     let player = null;
@@ -24,7 +25,7 @@ window.addEventListener('load', () => {
     let allStreams = [];
     const isDesktop = () => window.innerWidth >= 1024;
     
-    const originalTitle = "Wave - Wave - Listen to Your Favorite Radio Stations";
+    const originalTitle = "Wave - Listen to Your Favorite Radio Stations";
     const audioElement = allSelectors.audioElement;
 
     const setAudioPoster = () => {
@@ -35,6 +36,9 @@ window.addEventListener('load', () => {
     };
     
     const setupLayout = () => {
+        if (allSelectors.customControls && !activeStream) {
+            allSelectors.customControls.style.display = 'none';
+        }
         if (isDesktop()) {
             if (allSelectors.playerView) allSelectors.playerView.classList.add('active');
             if (allSelectors.minimizeBtn) allSelectors.minimizeBtn.style.display = 'none';
@@ -149,6 +153,8 @@ window.addEventListener('load', () => {
             const { manifestUri } = await response.json();
             if (!manifestUri) throw new Error(`Manifest URI not found for ${stream.name}`);
             
+            if (allSelectors.customControls) allSelectors.customControls.style.display = 'flex';
+            
             allSelectors.playerWrapper.style.backgroundImage = `url('${stream.logo}')`;
             allSelectors.playerWrapper.style.backgroundColor = '#ffffff';
 
@@ -194,6 +200,7 @@ window.addEventListener('load', () => {
         audioElement.removeAttribute('src');
         activeStream = null;
         setAudioPoster();
+        if (allSelectors.customControls) allSelectors.customControls.style.display = 'none';
         history.pushState({}, "", window.location.pathname);
         document.title = originalTitle;
         if (isDesktop()) {
