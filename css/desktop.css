@@ -23,7 +23,7 @@
         padding: 0 20px;
         box-sizing: border-box;
         transition: none;
-        background-color: none;
+        background-color: var(--background-color);
     }
 
     .player-header {
@@ -31,7 +31,7 @@
     }
 
     .video-player-container {
-        margin: auto 0;
+        margin: auto;
         aspect-ratio: 1 / 1;
         max-width: 555px;
         display: flex;
