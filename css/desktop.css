@@ -38,15 +38,34 @@
     .player-info {
         max-width: 555px;
     }
-    
-    #audio-player:-webkit-full-screen {
-        border-radius: 0;
-    }
-    
+        
+    #audio-player:-webkit-full-screen,
     #audio-player:fullscreen {
         border-radius: 0;
+        background: #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-y: auto;
     }
 
+     #audio-player:fullscreen .audio-poster {
+        margin-bottom: 20px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    #audio-player:fullscreen .player-info {
+        position: static;
+        width: 100%;
+        max-width: 650px;
+        padding: 0;
+        background: transparent;
+    }
+    
     .player-info {
         max-width: none;
         padding: 25px 20px 0;
