@@ -14,14 +14,16 @@
         align-items: start;
     }
 
-        #player-view {
+    #player-view {
         position: sticky;
         top: 80px;
         height: calc(100vh - 100px);
+        width: calc(100vh - 100px);
         display: flex;
         flex-direction: column;
         padding: 0 20px;
         box-sizing: border-box;
+        transition: none;
     }
 
     .player-header {
@@ -41,11 +43,11 @@
         position: static;
         margin-bottom: 20px;
         margin-top: 20px;
-        
         width: 100%;
         max-width: none;
         padding: 0;
         flex-shrink: 0;
+        transition: none;
     }
     
     .content-container {
