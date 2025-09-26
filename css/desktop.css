@@ -31,12 +31,12 @@
     }
 
     .video-player-container {
-        max-width: 557px;
+        max-width: 565px;
         margin: 0 auto;
     }
 
     .player-info {
-        max-width: 560px;
+        max-width: 565px;
     }
     
     #audio-player:-webkit-full-screen {
