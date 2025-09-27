@@ -309,7 +309,7 @@ header.subpage-header h1 {
     font-size: 0.4rem; 
     font-weight: 500; 
     background-color: var(--theme-color); 
-    color: #000; 
+    color: var(--text-color); 
 }
 
 .slide-sponsored { 
